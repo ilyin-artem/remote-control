@@ -1,4 +1,5 @@
 import { httpServer } from './http_server/index.js';
+import robot from 'robotjs';
 import { WebSocketServer } from 'ws';
 import * as mouse from './modules/mouseActions.js';
 const HTTP_PORT = 3000;
@@ -15,6 +16,10 @@ wss.on('connection', function connection(ws) {
             case action === 'draw':
                 break;
             case action === 'mouse':
+                if (command === 'position') {
+                    ws.send(mouse.position());
+                    break;
+                }
                 if (command === 'up')
                     mouse.up(arg1);
                 if (command === 'down')
@@ -31,6 +36,18 @@ wss.on('connection', function connection(ws) {
     });
     ws.send('something');
 });
+const mouseMove = () => {
+    let mouse = robot.getMousePos();
+    robot.setMouseDelay(1);
+    var twoPI = Math.PI * 2.0;
+    var screenSize = robot.getScreenSize();
+    let height = 100;
+    let width = 100;
+    let y = 0;
+    for (var x = 0; x < width; x++) {
+        robot.moveMouse(x, y);
+    }
+};
 const splitMessage = (data) => {
     const messageArr = data.toString().split(' ');
     const [action, command] = messageArr[0].split('_');

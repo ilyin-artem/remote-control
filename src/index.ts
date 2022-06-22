@@ -22,13 +22,15 @@ wss.on('connection', function connection(ws) {
             case action === 'draw':
                 break;
             case action === 'mouse':
+                if (command === 'position') {
+                    ws.send(mouse.position());
+                    break;
+                }
                 if (command === 'up') mouse.up(arg1);
                 if (command === 'down') mouse.down(arg1);
                 if (command === 'left') mouse.left(arg1);
                 if (command === 'right') mouse.right(arg1);
-
                 ws.send(`mouse_${command}`);
-
                 break;
 
             default:

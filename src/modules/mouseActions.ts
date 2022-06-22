@@ -16,3 +16,8 @@ export const right = (offset: number) => {
     let mouse = robot.getMousePos();
     robot.moveMouse(mouse.x + offset, mouse.y);
 };
+export const position = () => {
+    let mouse = robot.getMousePos();
+    // console.log(`${mouse.x}_${mouse.y}`);
+    return `x:${mouse.x}_y:${mouse.y}`;
+};
