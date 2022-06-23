@@ -3,6 +3,7 @@ import { httpServer } from './http_server/index.js';
 import robot from 'robotjs';
 import WebSocket, { WebSocketServer } from 'ws';
 import * as mouse from './modules/mouseActions.js';
+import * as draw from './modules/drawActions.js';
 
 const HTTP_PORT = 3000;
 
@@ -16,10 +17,13 @@ wss.on('connection', function connection(ws) {
     ws.on('message', function message(data) {
         console.log('received: %s', data);
         const [action, command, arg1, arg2] = splitMessage(data);
-
+        const mousePoints = robot.getMousePos();
         clearInterval(timerMouse);
         switch (true) {
             case action === 'draw':
+                if (command === 'circle') draw.circle(arg1);
+                if (command === 'square') draw.rectangle(arg1);
+                if (command === 'rectangle') draw.rectangle(arg1, arg2);
                 break;
             case action === 'mouse':
                 if (command === 'position') {
@@ -41,29 +45,9 @@ wss.on('connection', function connection(ws) {
     ws.send('something');
 });
 
-// Move the mouse across the screen as a sine wave.
-
-// Speed up the mouse.
-const mouseMove = () => {
-    let mouse = robot.getMousePos();
-
-    robot.setMouseDelay(1);
-
-    var twoPI = Math.PI * 2.0;
-    var screenSize = robot.getScreenSize();
-    // var height = screenSize.height / 2 - 10;
-    // var width = screenSize.width;
-    let height = 100;
-    let width = 100;
-    let y = 0;
-    for (var x = 0; x < width; x++) {
-        robot.moveMouse(x, y);
-    }
-};
-
 const splitMessage = (data) => {
     const messageArr = data.toString().split(' ');
     const [action, command] = messageArr[0].split('_');
-    const [arg1, arg2] = [Number(messageArr[1]), Number(messageArr[2])];
+    const [arg1, arg2] = [Number(messageArr[1] - 1), Number(messageArr[2]) - 1];
     return [action, command, arg1, arg2];
 };

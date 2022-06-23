@@ -1,23 +1,40 @@
 import robot from 'robotjs';
 
 export const up = (offset: number) => {
-    let mouse = robot.getMousePos();
-    robot.moveMouse(mouse.x, mouse.y - offset);
+    const { x, y } = getPoints();
+    // console.log(`x=${x} y=${y}`);
+
+    robot.moveMouse(x, y - offset);
 };
 export const down = (offset: number) => {
-    let mouse = robot.getMousePos();
-    robot.moveMouse(mouse.x, mouse.y + offset);
+    const { x, y } = getPoints();
+    robot.moveMouse(x, y + offset);
 };
 export const left = (offset: number) => {
-    let mouse = robot.getMousePos();
-    robot.moveMouse(mouse.x - offset, mouse.y);
+    const { x, y } = getPoints();
+    robot.moveMouse(x - offset, y);
 };
 export const right = (offset: number) => {
-    let mouse = robot.getMousePos();
-    robot.moveMouse(mouse.x + offset, mouse.y);
+    const { x, y } = getPoints();
+    robot.moveMouse(x + offset, y);
 };
 export const position = () => {
-    let mouse = robot.getMousePos();
-    // console.log(`${mouse.x}_${mouse.y}`);
-    return `x:${mouse.x}_y:${mouse.y}`;
+    const { x, y } = getPoints();
+    // console.log(`${x}_${y}`);
+    return `x:${x},y:${y}`;
+};
+// export const smoothMove = (offset) => {
+//     const mouse = robot.getMousePos();
+//     console.log(`x=${x} y=${y}`);
+
+//     robot.moveMouse(x, y - offset);
+// // };
+// export const smoothMove = async (callback, offset) => {
+//     for (let i = 0; i < offset; i++) {
+//         await callback(1);
+//     }
+// };
+
+export const getPoints = () => {
+    return robot.getMousePos();
 };
