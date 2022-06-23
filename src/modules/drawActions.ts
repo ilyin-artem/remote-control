@@ -1,7 +1,20 @@
 import robot from 'robotjs';
 import * as mouse from './mouseActions.js';
 
-export const circle = (offset) => {};
+export const circle = (width) => {
+    const { x, y } = mouse.getPoints();
+    const radius = width / 2;
+    robot.moveMouse(x + radius, y);
+    robot.mouseToggle('down');
+    for (let i = 0; i <= Math.PI * 2; i += 0.01) {
+        const pointX = x + radius * Math.cos(i);
+        const pointY = y + radius * Math.sin(i);
+
+        robot.moveMouse(pointX, pointY);
+    }
+    robot.mouseToggle('up');
+};
+
 export const rectangle = (width, height = width) => {
     const { x, y } = mouse.getPoints();
     const point1 = { x: x + width, y: y };
