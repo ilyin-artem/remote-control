@@ -2,7 +2,6 @@ import robot from 'robotjs';
 
 export const up = (offset: number) => {
     const { x, y } = getPoints();
-    // console.log(`x=${x} y=${y}`);
 
     robot.moveMouse(x, y - offset);
 };
@@ -18,23 +17,15 @@ export const right = (offset: number) => {
     const { x, y } = getPoints();
     robot.moveMouse(x + offset, y);
 };
-export const position = () => {
+export const position = (): string => {
     const { x, y } = getPoints();
-    // console.log(`${x}_${y}`);
+
     return `x:${x},y:${y}`;
 };
-// export const smoothMove = (offset) => {
-//     const mouse = robot.getMousePos();
-//     console.log(`x=${x} y=${y}`);
 
-//     robot.moveMouse(x, y - offset);
-// // };
-// export const smoothMove = async (callback, offset) => {
-//     for (let i = 0; i < offset; i++) {
-//         await callback(1);
-//     }
-// };
-
-export const getPoints = () => {
+export const getPoints = (): {
+    x: number;
+    y: number;
+} => {
     return robot.getMousePos();
 };

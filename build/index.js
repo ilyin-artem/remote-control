@@ -8,16 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { httpServer } from './http_server/index.js';
-import robot from 'robotjs';
 import { WebSocketServer, createWebSocketStream } from 'ws';
 import * as mouse from './modules/mouseActions.js';
 import * as draw from './modules/drawActions.js';
 import { captureScreen } from './modules/captureScreen.js';
+import { splitMessage } from './modules/helpers.js';
 const HTTP_PORT = 3000;
 console.log(`Start static http server on the ${HTTP_PORT} port!`);
 httpServer.listen(HTTP_PORT);
 const wss = new WebSocketServer({ port: 8080 });
-let timerMouse;
 wss.on('connection', function connection(ws) {
     const duplex = createWebSocketStream(ws, {
         encoding: 'utf8',
@@ -26,8 +25,6 @@ wss.on('connection', function connection(ws) {
     duplex.on('data', (chunk) => __awaiter(this, void 0, void 0, function* () {
         console.log('received: %s', chunk);
         const [action, command, arg1, arg2] = splitMessage(chunk);
-        const mousePoints = robot.getMousePos();
-        clearInterval(timerMouse);
         switch (true) {
             case action === 'draw':
                 if (command === 'circle')
@@ -61,9 +58,6 @@ wss.on('connection', function connection(ws) {
         }
     }));
 });
-const splitMessage = (data) => {
-    const messageArr = data.toString().split(' ');
-    const [action, command] = messageArr[0].split('_');
-    const [arg1, arg2] = [Number(messageArr[1] - 1), Number(messageArr[2]) - 1];
-    return [action, command, arg1, arg2];
-};
+wss.on('close', () => {
+    console.log('WebSocket closed');
+});
