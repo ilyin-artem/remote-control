@@ -9,7 +9,10 @@
         "moduleResolution": "Node",
         "forceConsistentCasingInFileNames": true,
         "esModuleInterop": true,
-        "allowJs": true
+        "allowJs": true,
+        "noImplicitAny": true,
+        "strict": true
+
         // "resolveJsonModule": true,
     },
     "include": ["./src/**/*"],
